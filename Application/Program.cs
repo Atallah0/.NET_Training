@@ -1,4 +1,6 @@
+using Domain.Project.Repositories;
 using Infrastructure.DBContext;
+using Infrastructure.Project.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,6 +15,10 @@ builder.Services.AddSwaggerGen();
 // Ask About it
 builder.Services.AddDbContext<LearningContext>(options =>
         options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+// My Services
+builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
+
 
 var app = builder.Build();
 

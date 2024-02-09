@@ -1,3 +1,4 @@
+using Domain.Project.Repositories;
 using Infrastructure.DBContext;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -8,17 +9,17 @@ namespace Application.Project.Controllers
     [Route("api/[controller]")]
     public class ProjectsController : ControllerBase
     {
-        private readonly LearningContext _context;
+        private readonly IProjectRepository _repo;
 
-        public ProjectsController(LearningContext context)
+        public ProjectsController(IProjectRepository repo)
         {
-            _context = context;
+            _repo = repo;
         }
 
         [HttpGet]
         public async Task<ActionResult<List<Domain.Project.Models.Project>>> GetProjects()
         {
-            var projects = await _context.Projects.ToListAsync();
+            var projects = await _repo.GetProjectsAsync();
 
             return Ok(projects);
         }
@@ -26,7 +27,7 @@ namespace Application.Project.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Domain.Project.Models.Project>> GetProject(int id)
         {
-            return await _context.Projects.FindAsync(id);
+            return await _repo.GetProjectByIdAsync(id);
         }
     }
 }

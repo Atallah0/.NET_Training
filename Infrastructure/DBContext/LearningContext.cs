@@ -9,6 +9,6 @@ namespace Infrastructure.DBContext
         {
         }
 
-        public DbSet<Project> Projects { get; set; }
+        public DbSet<Domain.Project.Models.Project> Projects { get; set; }
     }
 }
