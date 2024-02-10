@@ -40,13 +40,21 @@ namespace Application.Project.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult<Domain.Project.Models.Project>> UpdateProject(int id, [FromBody] Domain.Project.Models.Project project)
         {
-            if (id != project.Id)
+            // Retrieve the project using the id from the URL
+            var existingProject = await _repo.GetProjectByIdAsync(id);
+            if (existingProject == null)
             {
-                return BadRequest("Id in URL and body doesn't match");
+                return NotFound("Project not found");
             }
-            
-            var updatedProject = await _repo.UpdateProjectAsync(project);
-            return Ok(updatedProject);
+
+            // Update the retrieved project with the data from the body
+            existingProject.Name = project.Name;
+            // Update other properties as needed
+
+            // Apply the changes to the database
+            await _repo.UpdateProjectAsync(existingProject);
+
+            return Ok(existingProject);
         }
 
         [HttpDelete("{id}")]
